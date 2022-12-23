@@ -1,0 +1,35 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "Win32",
+            "generator": "Visual Studio 17 2022",
+            "architecture": {
+                "strategy": "set",
+                "value": "Win32"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Debug",
+            "configurePreset": "Win32",
+            "configuration": "Debug"
+        },
+        {
+            "name": "Release",
+            "configurePreset": "Win32",
+            "configuration": "Release"
+        },
+        {
+            "name": "RelWithDebInfo",
+            "configurePreset": "Win32",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "MinSizeRel",
+            "configurePreset": "Win32",
+            "configuration": "MinSizeRel"
+        }
+    ]
+}

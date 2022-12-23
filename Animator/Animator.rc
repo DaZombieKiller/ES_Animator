@@ -1,0 +1,650 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include <winuser.h>
+#include <winnt.h>
+#include <commctrl.h>
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1251)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include <winuser.h>\r\n"
+    "#include <winnt.h>\r\n"
+    "#include <commctrl.h>\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Neutral resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+ICO_IKMOV               ICON    DISCARDABLE     "ico_ikmo.ico"
+ICO_MATRIX              ICON    DISCARDABLE     "icon2.ico"
+ICO_IKROT               ICON    DISCARDABLE     "ikrot.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SETMATRIX DIALOG DISCARDABLE  0, 0, 241, 164
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Set IK Params"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,151,123,41,14
+    PUSHBUTTON      "Cancel",IDCANCEL,195,123,40,14
+    EDITTEXT        IDC_MIN1,39,14,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MIN2,39,30,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MIN3,39,46,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDITMASS,203,14,24,14,ES_AUTOHSCROLL
+    LTEXT           "Mass",IDC_STATIC,170,17,17,10
+    EDITTEXT        IDC_MAX1,69,14,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX2,69,30,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX3,69,46,19,14,ES_AUTOHSCROLL
+    LTEXT           "--",IDC_STATIC,60,16,8,10
+    LTEXT           "--",IDC_STATIC,60,32,8,10
+    LTEXT           "--",IDC_STATIC,60,48,8,10
+    CONTROL         "base",IDC_CHECKBASE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,172,77,36,10
+    GROUPBOX        "Edit",IDC_STATIC,167,68,68,46
+    GROUPBOX        "Kinematic",IDC_STATIC,3,4,157,61
+    CONTROL         "apply force",IDC_CHECKFORCE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,172,89,49,10
+    GROUPBOX        "Dynamic",IDC_STATIC,167,4,68,61
+    EDITTEXT        IDC_EDITK1,203,30,24,14,ES_AUTOHSCROLL | WS_DISABLED
+    LTEXT           "reserved",IDC_STATIC,169,33,29,10
+    EDITTEXT        IDC_EDITK2,203,46,24,14,ES_AUTOHSCROLL | WS_DISABLED
+    LTEXT           "reserved",IDC_STATIC,169,49,27,10
+    GROUPBOX        "Info",IDC_STATIC,3,68,157,46
+    EDITTEXT        IDC_WABS,43,79,30,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Wabs",IDC_STATIC,11,81,24,10
+    EDITTEXT        IDC_FABS,43,95,30,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Fabs",IDC_STATIC,12,97,24,10
+    EDITTEXT        IDC_FX,76,95,16,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_FY,95,95,16,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_FZ,115,95,17,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "MIN",IDSETMIN,129,14,26,14
+    PUSHBUTTON      "MAX",IDSETMAX,129,30,26,14
+    EDITTEXT        IDC_CURX,94,14,19,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_CURY,94,30,19,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_CURZ,94,46,19,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_ACTIVEX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,117,
+                    16,8,10
+    CONTROL         "",IDC_ACTIVEY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,117,
+                    33,8,10
+    CONTROL         "",IDC_ACTIVEZ,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,117,
+                    49,8,10
+    CONTROL         "fix position",IDC_CHECKFIX,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,172,101,49,10
+    CONTROL         "rsct X",IDC_RESTRICTX,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,8,17,25,9
+    CONTROL         "rsct Y",IDC_RESTRICTY,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,8,33,25,9
+    CONTROL         "rsct Z",IDC_RESTRICTZ,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,8,49,25,9
+    GROUPBOX        "Influence sphere",IDC_STATIC,3,114,64,46
+    EDITTEXT        IDC_WABS2,29,125,21,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "min",IDC_STATIC,11,127,15,10
+    EDITTEXT        IDC_FABS2,29,141,21,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "max",IDC_STATIC,11,143,14,10
+END
+
+IDD_SETPHYS DIALOG DISCARDABLE  0, 0, 199, 62
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Physic"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,142,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,142,24,50,14
+    EDITTEXT        IDC_EDITG,39,7,20,12,ES_AUTOHSCROLL
+    LTEXT           "Gravity",IDC_STATIC,7,8,22,11
+    EDITTEXT        IDC_EDITWINDPOWER,40,22,19,12,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    LTEXT           "Wind",IDC_STATIC,7,24,22,11
+    LTEXT           "---",IDC_STATIC,61,24,8,11
+    EDITTEXT        IDC_EDITWINDX,71,22,19,12,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDITWINDY,94,22,19,12,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDITWINDZ,116,22,19,12,ES_AUTOHSCROLL | WS_DISABLED
+    LTEXT           "Dumping",IDC_STATIC,8,40,30,11
+    EDITTEXT        IDC_EDITDUMP,40,38,19,12,ES_AUTOHSCROLL | WS_DISABLED
+    LTEXT           "TimeSc",IDC_STATIC,67,9,27,11
+    EDITTEXT        IDC_EDITTIME,97,7,38,12,ES_AUTOHSCROLL
+END
+
+IDD_TRACKBMP DIALOG DISCARDABLE  0, 0, 212, 90
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Track bitmaps"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,128,70,37,14
+    PUSHBUTTON      "Cancel",IDCANCEL,168,70,34,14
+    EDITTEXT        IDC_EDIT1,46,32,48,12,ES_AUTOHSCROLL
+    LTEXT           "Front",IDC_STATIC,14,35,25,9
+    CONTROL         "Disabled",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,11,69,44,11
+    EDITTEXT        IDC_EDIT2,46,46,48,12,ES_AUTOHSCROLL
+    LTEXT           "Left",IDC_STATIC,14,49,25,9
+    GROUPBOX        "Names of files",IDC_STATIC,4,5,202,60
+    EDITTEXT        IDC_EDIT3,46,18,115,12,ES_AUTOHSCROLL
+    LTEXT           "Path",IDC_STATIC,14,20,25,9
+    PUSHBUTTON      "Browse..",IDC_BUTTON1,164,18,39,13
+    EDITTEXT        IDC_EDIT4,134,33,20,12,ES_AUTOHSCROLL
+    LTEXT           "Begin",IDC_STATIC,113,35,18,9
+    EDITTEXT        IDC_EDIT5,134,47,20,12,ES_AUTOHSCROLL
+    LTEXT           "Step",IDC_STATIC,113,49,18,9
+END
+
+IDD_IKPROP DIALOG DISCARDABLE  0, 0, 149, 64
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "IK"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,65,49,40,12
+    PUSHBUTTON      "Cancel",IDCANCEL,107,49,38,12
+    EDITTEXT        IDC_EDIT1,109,17,28,12,ES_AUTOHSCROLL
+    CONTROL         "Transfer influence to n links",IDC_RADIO1,"Button",
+                    BS_AUTORADIOBUTTON,17,18,92,9
+    CONTROL         "Transfer influence to first multi link",IDC_RADIO2,
+                    "Button",BS_AUTORADIOBUTTON,17,31,110,9
+    GROUPBOX        "IK Properties (2D/3D)",IDC_STATIC,2,3,140,41,WS_GROUP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_SETMATRIX, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 235
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 160
+    END
+
+    IDD_SETPHYS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 192
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+
+    IDD_TRACKBMP, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 209
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 85
+    END
+
+    IDD_IKPROP, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 146
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 61
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+ICO_MOV                 ICON    DISCARDABLE     "ico_ms.ico"
+ICO_ROT                 ICON    DISCARDABLE     "ico_rs.ico"
+ICO_SC3                 ICON    DISCARDABLE     "ico_sc3s.ico"
+ICO_SC2                 ICON    DISCARDABLE     "ico_sc2s.ico"
+ICO_EXIT                ICON    DISCARDABLE     "ico_exit.ico"
+ICO_ROL                 ICON    DISCARDABLE     "ico_rol.ico"
+APPICON                 ICON    DISCARDABLE     "appicon.ICO"
+ICO_0X0                 ICON    DISCARDABLE     "ico_0x0.ico"
+ICO_ANI                 ICON    DISCARDABLE     "ico_ani.ico"
+ICO_ZOOM                ICON    DISCARDABLE     "ico_zoom.ico"
+ICO_MAXO                ICON    DISCARDABLE     "ico00001.ico"
+ICO_MAXA                ICON    DISCARDABLE     "ico_maxa.ico"
+ICO_HOLD                ICON    DISCARDABLE     "ico_hold.ico"
+ICO_FET                 ICON    DISCARDABLE     "ico_fet.ico"
+ICO_IN                  ICON    DISCARDABLE     "ico_in.ico"
+ICO_OUT                 ICON    DISCARDABLE     "ico_out.ico"
+ICO_SCRL                ICON    DISCARDABLE     "ico_mov.ico"
+ICO_TEXT                ICON    DISCARDABLE     "ico_text.ico"
+ICO_FLAT                ICON    DISCARDABLE     "ico_flat.ico"
+ICO_WF                  ICON    DISCARDABLE     "ico_wf.ico"
+ICO_SETSPHERE           ICON    DISCARDABLE     "ico_sets.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUT DIALOGEX 0, 0, 147, 86
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | 
+    WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CLIENTEDGE
+CAPTION "About 3D Animator"
+FONT 10, "Times New Roman", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,48,66,50,14
+    LTEXT           "3D Animator. Version 1.0",IDC_STATIC,40,8,92,8
+    LTEXT           "(c) Action Forms Ltd. 1997",IDC_STATIC,40,20,88,7
+    LTEXT           "Programming :",IDC_STATIC,5,44,47,8
+    ICON            "!DESIGNER",IDC_STATIC,8,8,18,20
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | WS_BORDER,0,40,146,
+                    1,WS_EX_DLGMODALFRAME
+    LTEXT           "Oleg Slusar &&            Artem Kuriavchenko",
+                    IDC_STATIC,56,45,64,18
+END
+
+IDD_CAMERA DIALOG DISCARDABLE  0, 0, 223, 133
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "User setup"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "&Wire frame",IDC_MODE1,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,18,20,80,8
+    CONTROL         "&Gray filled",IDC_MODE2,"Button",BS_AUTORADIOBUTTON,18,
+                    32,79,8
+    CONTROL         "&Flat",IDC_MODE3,"Button",BS_AUTORADIOBUTTON,18,44,81,8
+    CONTROL         "&Textured",IDC_MODE4,"Button",BS_AUTORADIOBUTTON,18,56,
+                    80,8
+    CONTROL         "&Black",IDC_COLOR1,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,126,20,80,8
+    CONTROL         "&Dark gray",IDC_COLOR2,"Button",BS_AUTORADIOBUTTON,126,
+                    32,79,8
+    CONTROL         "&Gray",IDC_COLOR3,"Button",BS_AUTORADIOBUTTON,126,44,81,
+                    8
+    CONTROL         "&Z Buffer",IDC_ZBUF,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,19,85,53,10
+    CONTROL         "&Reversed view",IDC_REVVIEW,"Button",BS_AUTOCHECKBOX,19,
+                    97,57,10
+    CONTROL         "&Points bar",IDC_POINT,"Button",BS_AUTOCHECKBOX,19,110,
+                    47,10
+    DEFPUSHBUTTON   "OK",IDOK,116,109,44,14
+    PUSHBUTTON      "Cancel",IDCANCEL,169,109,43,14
+    GROUPBOX        "&Model",IDC_STATIC,8,8,96,61,WS_GROUP
+    GROUPBOX        "&Background fill",IDC_COLOR,116,8,96,50,WS_GROUP
+    GROUPBOX        "&Common",IDC_STATIC,8,74,96,50,WS_GROUP
+END
+
+IDD_EMODE DIALOGEX 0, 0, 219, 85
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Editor Properties"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    COMBOBOX        IDC_COMBO,52,15,47,72,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "Grid l&ines",IDC_GRIDLINES,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,13,31,64,12
+    CONTROL         "&Mouse alignment",IDC_MOUSE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,13,46,67,8
+    CONTROL         "&Center lines",IDC_CENTER,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,121,16,53,10
+    CONTROL         "&Points bar",IDC_POINT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,121,30,47,10
+    CONTROL         "&Show objects",IDC_SHOWOBJ,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,121,44,59,10
+    CONTROL         "&Assign to all windows",IDC_ALLWIN,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,65,100,15,
+                    WS_EX_DLGMODALFRAME
+    DEFPUSHBUTTON   "OK",IDOK,113,65,47,14
+    PUSHBUTTON      "Cancel",IDCANCEL,164,65,46,14
+    GROUPBOX        "&Grid settings",IDC_STATIC,6,4,99,56
+    LTEXT           "Grid STEP",IDC_STATIC,14,17,33,10
+    GROUPBOX        "&Common",IDC_STATIC,113,4,96,56,WS_GROUP
+END
+
+IDD_INFO DIALOGEX 0, 0, 147, 137
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | 
+    WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+CAPTION "Info"
+FONT 10, "Courier", 0, 0, 0x1
+BEGIN
+    LTEXT           "",IDC_STATIC,7,5,134,44,0,WS_EX_STATICEDGE
+    LTEXT           "",IDC_STATIC,7,56,134,55,0,WS_EX_STATICEDGE
+    LTEXT           "rules!",IDC_FNAME,53,10,80,8
+    LTEXT           "380",IDC_VINFO,53,23,80,8
+    LTEXT           "275",IDC_MINFO,53,36,80,8
+    RTEXT           "  Edit:",IDC_STATIC,9,10,40,8
+    RTEXT           " Video:",IDC_STATIC,9,23,40,8
+    RTEXT           "Memory:",IDC_ST,9,36,40,8
+    RTEXT           "Objects:",IDC_STATIC,9,60,40,8
+    RTEXT           "Faces:",IDC_STATIC,9,72,40,8
+    RTEXT           "Vertexes:",IDC_STATIC,9,84,40,8
+    RTEXT           "Texture:",IDC_STATIC,9,97,40,8
+    LTEXT           "32",IDC_OCNT,53,60,80,8
+    LTEXT           "380",IDC_FCNT,53,72,80,8
+    LTEXT           "275",IDC_VCNT,53,84,80,8
+    LTEXT           "bla bla bla...",IDC_TINFO,53,97,80,8
+    DEFPUSHBUTTON   "OK",IDOK,52,117,37,14
+END
+
+IDD_APROP DIALOG DISCARDABLE  0, 0, 137, 116
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,17,95,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,69,95,50,14
+    LTEXT           "Keys per second",IDC_STATIC,20,10,54,8
+    EDITTEXT        IDC_EDIT,80,7,41,14,ES_AUTOHSCROLL
+    COMBOBOX        IDC_COMBO,80,27,41,76,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Rotation sequence",IDC_STATIC,14,30,61,8
+    LTEXT           "X Angle max diff",IDC_STATIC,20,46,54,8
+    EDITTEXT        IDC_EDIT2,80,43,41,14,ES_AUTOHSCROLL
+    LTEXT           "Y Angle max diff",IDC_STATIC,20,62,54,8
+    EDITTEXT        IDC_EDIT3,80,59,41,14,ES_AUTOHSCROLL
+    LTEXT           "Z Angle max diff",IDC_STATIC,20,78,54,8
+    EDITTEXT        IDC_EDIT4,80,75,41,14,ES_AUTOHSCROLL
+END
+
+IDD_OTREE DIALOGEX 0, 0, 165, 287
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Objects"
+FONT 8, "Courier", 0, 0, 0x1
+BEGIN
+    CONTROL         "Tree1",IDC_TREEO,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_LINESATROOT | TVS_DISABLEDRAGDROP | 
+                    TVS_SHOWSELALWAYS | WS_TABSTOP,2,6,160,257,
+                    WS_EX_CLIENTEDGE
+    DEFPUSHBUTTON   "OK",IDOK,55,269,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,112,269,50,14
+END
+
+IDD_ROLL DIALOG DISCARDABLE  0, 0, 118, 45
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Roll track"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_EDIT,49,4,47,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,6,26,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,61,26,50,14
+    LTEXT           "Rolls count",IDC_STATIC,8,8,35,8
+END
+
+IDD_RLPARAMS DIALOG DISCARDABLE  0, 0, 118, 115
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Rotate-L parameters"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_EDIT1,51,18,47,12,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,6,94,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,61,94,50,14
+    LTEXT           "Level 0",IDC_STATIC,21,20,29,8
+    GROUPBOX        "",IDC_STATIC,7,7,104,79
+    EDITTEXT        IDC_EDIT2,51,35,47,12,ES_AUTOHSCROLL
+    LTEXT           "Level 1",IDC_STATIC,21,37,29,8
+    EDITTEXT        IDC_EDIT3,51,52,47,12,ES_AUTOHSCROLL
+    LTEXT           "Level 2",IDC_STATIC,21,54,29,8
+    EDITTEXT        IDC_EDIT4,51,69,47,12,ES_AUTOHSCROLL
+    LTEXT           "Level 3",IDC_STATIC,21,71,29,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_CAMERA, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 216
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 126
+    END
+
+    IDD_EMODE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 212
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 78
+    END
+
+    IDD_APROP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 130
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 109
+    END
+
+    IDD_OTREE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 158
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 280
+    END
+
+    IDD_ROLL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 111
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 38
+    END
+
+    IDD_RLPARAMS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 111
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 108
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+ANIMATORMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Load model...",              IDM_FILEOPEN
+        MENUITEM SEPARATOR
+        MENUITEM "&Clear track",                IDM_NEW
+        MENUITEM "&Open track...\tF3",          IDM_OPENTRACK
+        MENUITEM "&Save\tF2",                   IDM_SAVE
+        MENUITEM "Save &As...    ",             IDM_SAVEAS
+        MENUITEM SEPARATOR
+        MENUITEM "Load Sound\tCtrl-Q",          IDM_WAV
+        MENUITEM SEPARATOR
+        MENUITEM "Open IK Info..      Shift-F3", IDM_OpenIK
+        MENUITEM "Save IK Info &As..  Shift-F2", IDM_SAVEIKAS
+        MENUITEM "Save VTable...\tCtrl-F2",     IDM_SAVEANI
+        MENUITEM "Save 3df..",                  IDM_SAVE3DF
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       IDM_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl-Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Mirror animation...",         IDM_MIRRORKEY
+        MENUITEM "Invert track...",             IDM_INVERTTRACK
+        MENUITEM "Reverse track...",            IDM_REVERSETRACK
+        MENUITEM "Roll track...",               IDM_ROLLTRACK
+        MENUITEM SEPARATOR
+        MENUITEM "Show sceleton\tCtrl-S",       IDM_SHOWSCEL
+        MENUITEM "Show wireframe model\tCtrl-M", IDM_SHOWMODEL
+        MENUITEM "Show textured model\tCtrl-T", IDM_SHOWMODELT
+        MENUITEM "Show back surfaces\t",        IDM_SHOWBACK
+        MENUITEM SEPARATOR
+        MENUITEM "RL properties...",            ID_EDIT_RLPROP
+        MENUITEM "Properties...",               ID_EDIT_PROPERTIES
+        MENUITEM SEPARATOR
+        MENUITEM "Save mapping",                ID_SAVEMAP
+        MENUITEM "Restore mapping",             ID_RESTOREMAP
+        MENUITEM SEPARATOR
+        MENUITEM "Animation bitmaps..\tCtrl-B", ID_TRACKBMP
+        MENUITEM "Synchronize window\tCtrl-W",  ID_SYNCHRO
+        MENUITEM "Smooth object\tCtrl-L",       ID_OBJSMOOTH
+        MENUITEM "Smooth all",                  ID_OBJSMOOTHALL
+        MENUITEM SEPARATOR
+        MENUITEM "Recalc all angles..",         ID_RECALCALLANGLES, GRAYED
+    END
+    POPUP "&IK"
+    BEGIN
+        MENUITEM "Set physics    shift+P",      IDM_SetPhysic
+        MENUITEM "Apply Forces shift+F",        IDM_APPLYF
+        MENUITEM "Start physic .. Z",           IDM_StartPhysic
+        MENUITEM "End physic ..  X",            IDM_EndPhysic
+        MENUITEM SEPARATOR
+        MENUITEM "Set auto spheres shift+R",    ID_IK_SETAUTOSPHERESSHIFTR
+        MENUITEM "Properties..             Ctrl-I", ID_IKPROP
+        MENUITEM "Calculate angels  Ctrl+A",    ID_CALCANGELS
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&Maximize     \tF5",          IDM_ZOOM
+        MENUITEM SEPARATOR
+        MENUITEM "Zoom &in\t+",                 IDM_ZOOMIN
+        MENUITEM "Zoom &out\t-",                IDM_ZOOMOUT
+        MENUITEM SEPARATOR
+        MENUITEM "&Animate User",               IDM_ANI
+        MENUITEM "&Zero User angles",           IDM_ZERO
+        MENUITEM SEPARATOR
+        MENUITEM "&Set settings to all\tCtrl-A", IDM_SETSAME
+    END
+    POPUP "&Help", HELP
+    BEGIN
+        MENUITEM "Show &info...\tAlt-I",        IDM_INFO
+        MENUITEM SEPARATOR
+        MENUITEM "&About...",                   IDM_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+AA ACCELERATORS DISCARDABLE 
+BEGIN
+    "A",            ID_CALCANGELS,          VIRTKEY, CONTROL, NOINVERT
+    "B",            ID_TRACKBMP,            VIRTKEY, CONTROL, NOINVERT
+    "E",            IDM_SHOWSPHERES,        VIRTKEY, CONTROL, NOINVERT
+    "F",            IDM_APPLYF,             VIRTKEY, CONTROL, NOINVERT
+    "I",            IDM_INFO,               VIRTKEY, ALT, NOINVERT
+    "L",            ID_OBJSMOOTH,           VIRTKEY, CONTROL, NOINVERT
+    "M",            IDM_SHOWMODEL,          VIRTKEY, CONTROL, NOINVERT
+    "O",            IDM_OLIST,              VIRTKEY, CONTROL, NOINVERT
+    "P",            IDM_SetPhysic,          VIRTKEY, SHIFT, NOINVERT
+    "R",            IDM_SETAUTOSPHERER,     VIRTKEY, CONTROL, NOINVERT
+    "S",            IDM_SHOWSCEL,           VIRTKEY, CONTROL, NOINVERT
+    "T",            IDM_SHOWMODELT,         VIRTKEY, CONTROL, NOINVERT
+    VK_F2,          IDM_SAVE,               VIRTKEY, NOINVERT
+    VK_F2,          IDM_SAVEANI,            VIRTKEY, CONTROL, NOINVERT
+    VK_F2,          IDM_SAVEIKAS,           VIRTKEY, SHIFT, NOINVERT
+    VK_F3,          IDM_OPENNEXT,           VIRTKEY, NOINVERT
+    VK_F3,          IDM_OpenIK,             VIRTKEY, SHIFT, NOINVERT
+    VK_F5,          IDM_ZOOM,               VIRTKEY, NOINVERT
+    VK_SPACE,       IDM_PLAYREAL,           VIRTKEY, NOINVERT
+    VK_SPACE,       IDM_PLAYANI,            VIRTKEY, ALT, NOINVERT
+    VK_SPACE,       IDM_PLAYSOUND,          VIRTKEY, SHIFT, NOINVERT
+    "W",            ID_SYNCHRO,             VIRTKEY, CONTROL, NOINVERT
+    "X",            IDM_EndPhysic,          VIRTKEY, NOINVERT
+    "X",            IDM_EXIT,               VIRTKEY, ALT, NOINVERT
+    "Z",            IDM_StartPhysic,        VIRTKEY, NOINVERT
+    "Q",            IDM_WAV,                VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_HAND2               CURSOR  DISCARDABLE     "Hand.cur"
+IDC_RECT                CURSOR  DISCARDABLE     "square.cur"
+IDC_MOVEHV              CURSOR  DISCARDABLE     "movmode1.cur"
+IDC_MOVEV               CURSOR  DISCARDABLE     "movmode2.cur"
+IDC_MOVEH               CURSOR  DISCARDABLE     "movmode3.cur"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
