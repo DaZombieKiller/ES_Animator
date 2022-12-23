@@ -213,7 +213,7 @@ class DEVICECONTEXT {
 #define MOVE_VERTICAL      2
 #define MOVE_HORISONTAL    3
 
-#define VALUE_X            4024
+#define VALUE_X            8192
 #define MAXKEY             256
 
 #define FLAG_DOUBLESIDE          1
@@ -542,6 +542,7 @@ void SaveVTable();
 
 void SaveIKAs();
 void OpenIK();
+void LoadCmf(char* FName, HANDLE hfile);
 void Load3dfNew(char* FName, HANDLE hfile);
 void Save3DF();
 void SaveCMF();

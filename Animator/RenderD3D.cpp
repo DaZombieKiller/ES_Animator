@@ -29,11 +29,11 @@ DDSURFACEDESC2          ddsd;
 
 LPDIRECT3D7             lpd3d                     = NULL;
 LPDIRECT3DDEVICE7       lpd3dDevice               = NULL;
-D3DTLVERTEX             ddvtx[3*4096];
-WORD                    vxindex[3*4096];
+D3DTLVERTEX             ddvtx[3*8192];
+WORD                    vxindex[3*8192];
 D3DTLVERTEX             *lpVertex;
 D3DLVERTEX              *lpVertex3;
-Vector2d                gScrp[4096];
+Vector2d                gScrp[8192];
 
 LPDIRECT3DVERTEXBUFFER7 lpd3dVertexBuffer;
 

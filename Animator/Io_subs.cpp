@@ -320,6 +320,11 @@ void Load3df(char* FName)
         Load3dfNew(FName, hfile);
         goto OK;
     }
+    else if (id == 0x43464255) {
+        ReadFile( hfile, &id, 4, &l, NULL );
+        LoadCmf(FName, hfile);
+        goto OK;
+    }
 
 OK:
    CloseHandle(hfile);
@@ -482,7 +487,7 @@ BOOL OpenModel( HWND hWnd)
 	OpenFileName.lStructSize       = sizeof(OPENFILENAME);
     OpenFileName.hwndOwner         = hWnd;
     OpenFileName.hInstance         = g_hInst;
-    OpenFileName.lpstrFilter       = "Original model files [*.3df]\0*.3df\0\0";
+    OpenFileName.lpstrFilter       = "Original model files [*.3df]\0*.3df\0Vivisector model files [*.cmf]\0*.cmf\0\0";
     OpenFileName.lpstrCustomFilter = 0;
 	OpenFileName.nMaxCustFilter    = 0;
     OpenFileName.nFilterIndex      = LastFilterIndex;
@@ -988,6 +993,136 @@ void SaveVTable()
     RefreshFrame();
     
     SetWindowTitle("Saved.");
+}
+
+void LoadCmf(char* FName, HANDLE hfile)
+{
+    DWORD l, id, size;
+    DWORD filesize = GetFileSize(hfile, NULL);
+    DWORD position = SetFilePointer(hfile, 0, NULL, FILE_CURRENT);
+
+    LodCount = 1;
+    OCountL[0] = 0;
+    TCount = 1;
+
+    while (position < filesize)
+    {
+        ReadFile(hfile, &id, 4, &l, NULL);
+        ReadFile(hfile, &size, 4, &l, NULL);
+        DWORD datapos = SetFilePointer(hfile, 0, NULL, FILE_CURRENT);
+
+        switch (id)
+        {
+        case CHUNK_FACE_COUNT:
+            ReadFile(hfile, &FCountL[0], 4, &l, NULL);
+            FCountL[0] *= 2;
+            break;
+        case CHUNK_VERTEX_COUNT:
+            ReadFile(hfile, &VCountL[0], 4, &l, NULL);
+            break;
+        case CHUNK_OBJECT_COUNT:
+            ReadFile(hfile, &OCountL[0], 4, &l, NULL);
+            break;
+        case CHUNK_FACE_INDICES:
+            for (int i = 0; i < FCountL[0]; i += 2)
+            {
+                ReadFile(hfile, &gFaceL[0][i].v1, 4, &l, NULL);
+                ReadFile(hfile, &gFaceL[0][i].v2, 4, &l, NULL);
+                ReadFile(hfile, &gFaceL[0][i].v3, 4, &l, NULL);
+                gFaceL[0][i + 1].v1 = gFaceL[0][i].v1;
+                gFaceL[0][i + 1].v2 = gFaceL[0][i].v3;
+                ReadFile(hfile, &gFaceL[0][i + 1].v3, 4, &l, NULL);
+            }
+            break;
+        case CHUNK_TEXTURE_COORDS1:
+        case CHUNK_TEXTURE_COORDS2:
+            for (int i = 0; i < FCountL[0]; i += 2)
+            {
+                ReadFile(hfile, &gFaceL[0][i].tax, 4, &l, NULL);
+                ReadFile(hfile, &gFaceL[0][i].tbx, 4, &l, NULL);
+                ReadFile(hfile, &gFaceL[0][i].tcx, 4, &l, NULL);
+                gFaceL[0][i + 1].tax = gFaceL[0][i].tax;
+                gFaceL[0][i + 1].tbx = gFaceL[0][i].tcx;
+                ReadFile(hfile, &gFaceL[0][i + 1].tcx, 4, &l, NULL);
+
+                ReadFile(hfile, &gFaceL[0][i].tay, 4, &l, NULL);
+                ReadFile(hfile, &gFaceL[0][i].tby, 4, &l, NULL);
+                ReadFile(hfile, &gFaceL[0][i].tcy, 4, &l, NULL);
+                gFaceL[0][i + 1].tay = gFaceL[0][i].tay;
+                gFaceL[0][i + 1].tby = gFaceL[0][i].tcy;
+                ReadFile(hfile, &gFaceL[0][i + 1].tcy, 4, &l, NULL);
+            }
+            break;
+        case CHUNK_TEXTURE_INDICES:
+            // todo
+            break;
+        case CHUNK_VERTEX_POSITIONS:
+            for (int i = 0; i < VCountL[0]; i++)
+            {
+                ReadFile(hfile, &gVertexL[0][i].pos, sizeof(Vector3d), &l, NULL);
+            }
+            break;
+        case CHUNK_VERTEX_BONE_IDS:
+            for (int i = 0; i < VCountL[0]; i++)
+            {
+                ReadFile(hfile, &gVertexL[0][i].owner, 2, &l, NULL);
+            }
+            break;
+        case CHUNK_OBJECT_NAMES:
+            for (int i = 0; i < OCountL[0]; i++)
+            {
+                ReadFile(hfile, gObjL[0][i].OName, 32, &l, NULL);
+            }
+            break;
+        case CHUNK_OBJECT_POSITIONS:
+            for (int i = 0; i < OCountL[0]; i++)
+            {
+                ReadFile(hfile, &gObjL[0][i].pos, sizeof(Vector3d), &l, NULL);
+            }
+            break;
+        case CHUNK_OBJECT_INDICES:
+            for (int i = 0; i < OCountL[0]; i++)
+            {
+                ReadFile(hfile, &gObjL[0][i].owner, 2, &l, NULL);
+            }
+            break;
+        case CHUNK_TEXTURE_COUNT:
+            ReadFile(hfile, &TCount, 4, &l, NULL);
+            break;
+        case CHUNK_TEXTURE_NAMES:
+            for (int i = 0; i < TCount; i++)
+            {
+                char tname[128];
+                ReadFile(hfile, tname, 128, &l, NULL);
+                if (strstr(tname, ".bmp"))  LoadTextureBMP(i, tname);
+                if (strstr(tname, ".tga"))  LoadTextureTGA(i, tname);
+                char* name = strrchr(tname, '\\');
+
+                if (name == NULL)
+                    name = tname;
+                else
+                    name++;
+
+                strncpy(Textures[i].tname, name, 16);
+                Textures[i].tname[15] = 0;
+            }
+            break;
+        }
+
+        position = SetFilePointer(hfile, datapos + size, NULL, FILE_BEGIN);
+    }
+
+    for (int f = 0; f < FCountL[0]; f++)
+    {
+        memcpy(&gFace2[f].tax, &gFaceL[0][f].tax, 4 * 6);
+        memcpy(&gFace2[f].v1, &gFaceL[0][f].v1, 4 * 3);
+    }
+
+    // todo
+    TCount = 1;
+    FbyTCountL[0][0] = FCountL[0];
+
+    SetLod(0);
 }
 
 void Load3dfNew(char* FName, HANDLE hfile)
