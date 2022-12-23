@@ -723,6 +723,10 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam )
 			case IDM_SAVE3DF :
 				Save3DF();
 			return 0;
+
+            case IDM_SAVECMF :
+                SaveCMF();
+            return 0;
 			
 			case IDM_SAVEIKAS :               
 				SaveIKAs();

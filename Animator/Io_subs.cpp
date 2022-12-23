@@ -1048,6 +1048,228 @@ void Load3dfNew(char* FName, HANDLE hfile)
    SetLod(0);   
 }
 
+void SaveCMF()
+{
+    OPENFILENAME OpenFileName;
+    char szFile[MAX_PATH] = "\0";
+    strcpy(szFile, ModelName);
+    strcat(szFile, "_ani.cmf");
+    TPoint3dsi IntModel[VALUE_X];
+
+    // Fill in the OPENFILENAME structure to support a template and hook.
+    OpenFileName.lStructSize = sizeof(OPENFILENAME);
+    OpenFileName.hwndOwner = g_MWin;
+    OpenFileName.hInstance = g_hInst;
+    OpenFileName.lpstrFilter = "Vivisector model files [*.cmf]\0*.cmf\0\0";
+    OpenFileName.lpstrCustomFilter = 0;
+    OpenFileName.nMaxCustFilter = 0;
+    OpenFileName.nFilterIndex = 0;
+    OpenFileName.lpstrFile = szFile;
+    OpenFileName.nMaxFile = sizeof(szFile);
+    OpenFileName.lpstrFileTitle = NULL;
+    OpenFileName.nMaxFileTitle = 0;
+    if (ModelPath[0] == 0) OpenFileName.lpstrInitialDir = NULL;
+    else OpenFileName.lpstrInitialDir = ModelPath;
+    OpenFileName.lpstrTitle = "Save cmf";
+    OpenFileName.nFileOffset = 0;
+    OpenFileName.nFileExtension = 0;
+    OpenFileName.lpstrDefExt = "cmf";
+    OpenFileName.lCustData = 0;
+    OpenFileName.lpfnHook = (LPOFNHOOKPROC)OpenDlgProc;
+    OpenFileName.lpTemplateName = 0;
+    OpenFileName.Flags = OFN_ENABLEHOOK | OFN_NOCHANGEDIR | OFN_EXPLORER | OFN_HIDEREADONLY | OFN_ENABLESIZING;
+
+    // Call the common dialog function.
+    if (!GetSaveFileName(&OpenFileName)) return;
+
+    HANDLE hfile = CreateFile(szFile, GENERIC_WRITE, FILE_SHARE_READ,
+        NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+    if (hfile == INVALID_HANDLE_VALUE) {
+        MessageBox(NULL, "Error opening file!", "Animator", MB_OK | MB_ICONSTOP);
+        return;
+    }
+    SetWindowTitle("Saving...");
+
+    char dummy[112];
+    DWORD id,l,chunk,size;
+    int v,o,vi=0;    
+    ZeroMemory(dummy, 112);
+    
+    id=0x43464255;
+    WriteFile( hfile, &id,      4,         &l, NULL );    
+    id=0;
+    WriteFile( hfile, &id,      4,         &l, NULL );
+
+    chunk = CHUNK_MARKER;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = 0;
+    WriteFile( hfile, &size, 4, &l, NULL );
+
+    chunk = CHUNK_FACE_COUNT;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = 4;
+    WriteFile( hfile, &size, 4, &l, NULL );
+    WriteFile( hfile, &FCountL[CurLod], 4, &l, NULL );
+
+    chunk = CHUNK_VERTEX_COUNT;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = 4;
+    WriteFile( hfile, &size, 4, &l, NULL );
+    WriteFile( hfile, &VCountL[CurLod], 4, &l, NULL );
+
+    chunk = CHUNK_OBJECT_COUNT;
+    WriteFile(hfile, &chunk, 4, &l, NULL);
+    size = 4;
+    WriteFile(hfile, &size, 4, &l, NULL);
+    WriteFile(hfile, &OCountL[CurLod], 4, &l, NULL);
+
+    chunk = CHUNK_FACE_INDICES;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = 4 * 4 * FCountL[CurLod];
+    WriteFile( hfile, &size, 4, &l, NULL );
+
+    for (int i = 0; i < FCountL[CurLod]; i++)
+    {
+        v = gFace[i].v1;
+        WriteFile( hfile, &v, 4, &l, NULL );
+        v = gFace[i].v2;
+        WriteFile( hfile, &v, 4, &l, NULL );
+        v = gFace[i].v3;
+        WriteFile( hfile, &v, 4, &l, NULL );
+        v = gFace[i].v3;
+        WriteFile( hfile, &v, 4, &l, NULL );
+    }
+
+    chunk = CHUNK_TEXTURE_COORDS1;
+    WriteFile(hfile, &chunk, 4, &l, NULL);
+    size = 4 * 4 * 2 * FCountL[CurLod];
+    WriteFile(hfile, &size, 4, &l, NULL);
+
+    for (int i = 0; i < FCountL[CurLod]; i++)
+    {
+        WriteFile(hfile, &gFace2[i].tax, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tbx, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tcx, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tcx, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tay, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tby, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tcy, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tcy, 4, &l, NULL);
+    }
+
+    chunk = CHUNK_TEXTURE_COORDS2;
+    WriteFile(hfile, &chunk, 4, &l, NULL);
+    size = 4 * 4 * 2 * FCountL[CurLod];
+    WriteFile(hfile, &size, 4, &l, NULL);
+
+    for (int i = 0; i < FCountL[CurLod]; i++)
+    {
+        WriteFile(hfile, &gFace2[i].tax, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tbx, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tcx, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tcx, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tay, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tby, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tcy, 4, &l, NULL);
+        WriteFile(hfile, &gFace2[i].tcy, 4, &l, NULL);
+    }
+
+    chunk = CHUNK_TEXTURE_INDICES;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = 0;
+
+    for (int tx = 0; tx < TCount; tx++)
+        size += 4 * FbyTCountL[CurLod][tx];
+
+    WriteFile( hfile, &size, 4, &l, NULL );
+
+    for (int tx = 0; tx < TCount; tx++)
+    {
+        for (int i = 0; i < FbyTCountL[CurLod][tx]; i++)
+        {
+            WriteFile( hfile, &tx, 4, &l, NULL );
+        }
+    }
+
+    chunk = CHUNK_UNKNOWN_1;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = 2 * FCountL[CurLod];
+    WriteFile( hfile, &size, 4, &l, NULL );
+
+    for (int i = 0; i < FCountL[CurLod]; i++)
+    {
+        short s = 0;
+        WriteFile( hfile, &s, 2, &l, NULL );
+    }
+
+    chunk = CHUNK_VERTEX_POSITIONS;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = sizeof(Vector3d) * VCountL[CurLod];
+    WriteFile( hfile, &size, 4, &l, NULL );
+
+    for (int i = 0; i < VCountL[CurLod]; i++)
+        WriteFile( hfile, &gVertex[i].pos, sizeof(Vector3d), &l, NULL );
+
+    chunk = CHUNK_VERTEX_BONE_IDS;
+    WriteFile(hfile, &chunk, 4, &l, NULL);
+    size = 2 * VCountL[CurLod];
+    WriteFile(hfile, &size, 4, &l, NULL);
+
+    for (int i = 0; i < VCountL[CurLod]; i++)
+        WriteFile(hfile, &gVertex[i].owner, 2, &l, NULL);
+
+    chunk = CHUNK_OBJECT_NAMES;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = 32 * OCountL[CurLod];
+    WriteFile( hfile, &size, 4, &l, NULL );
+    
+    for (int i = 0; i < OCountL[CurLod]; i++)
+        WriteFile( hfile, gObj[i].OName, 32, &l, NULL );
+
+    chunk = CHUNK_OBJECT_POSITIONS;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = sizeof(Vector3d) * OCountL[CurLod];
+    WriteFile( hfile, &size, 4, &l, NULL );
+
+    for (int i = 0; i < OCountL[CurLod]; i++)
+        WriteFile( hfile, &gObj[i].pos, sizeof(Vector3d), &l, NULL);
+
+    chunk = CHUNK_OBJECT_INDICES;
+    WriteFile( hfile, &chunk, 4, &l, NULL );
+    size = 2 * OCountL[CurLod];
+    WriteFile( hfile, &size, 4, &l, NULL );
+
+    for (int i = 0; i < OCountL[CurLod]; i++)
+        WriteFile( hfile, &gObj[i].owner, 2, &l, NULL );
+
+    chunk = CHUNK_UNKNOWN_2;
+    WriteFile(hfile, &chunk, 4, &l, NULL);
+    size = 0;
+    WriteFile(hfile, &size, 4, &l, NULL);
+
+    chunk = CHUNK_TEXTURE_COUNT;
+    WriteFile(hfile, &chunk, 4, &l, NULL);
+    size = 4;
+    WriteFile(hfile, &size, 4, &l, NULL);
+    WriteFile(hfile, &TCount, 4, &l, NULL);
+
+    chunk = CHUNK_TEXTURE_NAMES;
+    WriteFile(hfile, &chunk, 4, &l, NULL);
+    size = 128 * TCount;
+    WriteFile(hfile, &size, 4, &l, NULL);
+
+    for (int i = 0; i < TCount; i++)
+    {
+        WriteFile(hfile, Textures[i].tname, 16, &l, NULL);
+        WriteFile(hfile, dummy, 112, &l, NULL);
+    }
+
+    CloseHandle(hfile);
+
+    SetWindowTitle("Saved.");
+}
+
 void Save3DF()
 {
     OPENFILENAME OpenFileName;

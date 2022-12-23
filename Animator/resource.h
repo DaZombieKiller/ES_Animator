@@ -181,6 +181,7 @@
 #define ID_OBJSMOOTHALL                 213
 #define IDM_SAVE3DF                     214
 #define ID_RECALCALLANGLES              215
+#define IDM_SAVECMF                     216
 #define IDE_SELECTED                    1022
 #define IDC_MODE1                       1027
 #define IDC_MODE2                       1028

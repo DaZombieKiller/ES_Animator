@@ -536,6 +536,7 @@ BEGIN
         MENUITEM "Save IK Info &As..  Shift-F2", IDM_SAVEIKAS
         MENUITEM "Save VTable...\tCtrl-F2",     IDM_SAVEANI
         MENUITEM "Save 3df..",                  IDM_SAVE3DF
+        MENUITEM "Save cmf..",                  IDM_SAVECMF
         MENUITEM SEPARATOR
         MENUITEM "E&xit",                       IDM_EXIT
     END

@@ -9,6 +9,25 @@
 
 #define NEW_3DF_VERSION 4
 
+// CMF
+#define CHUNK_MARKER 1
+#define CHUNK_TEXTURE_COUNT 2
+#define CHUNK_TEXTURE_NAMES 3
+#define CHUNK_FACE_COUNT 8209
+#define CHUNK_VERTEX_COUNT 8210
+#define CHUNK_FACE_INDICES 8211
+#define CHUNK_TEXTURE_INDICES 8220
+#define CHUNK_TEXTURE_COORDS1 8224
+#define CHUNK_TEXTURE_COORDS2 8225
+#define CHUNK_VERTEX_POSITIONS 8227
+#define CHUNK_OBJECT_COUNT 61456
+#define CHUNK_OBJECT_NAMES 61457
+#define CHUNK_OBJECT_POSITIONS 61458
+#define CHUNK_OBJECT_INDICES 61460
+#define CHUNK_UNKNOWN_1 61475
+#define CHUNK_VERTEX_BONE_IDS 61488
+#define CHUNK_UNKNOWN_2 12288
+
 #define macro_vector3d(X,Y,Z,NAME)\
 	union {\
 		struct {\
@@ -525,6 +544,7 @@ void SaveIKAs();
 void OpenIK();
 void Load3dfNew(char* FName, HANDLE hfile);
 void Save3DF();
+void SaveCMF();
 
 void Load3df( char* );
 void LoadTrk( char* );
