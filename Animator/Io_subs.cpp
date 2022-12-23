@@ -143,6 +143,9 @@ void LoadTextureTGA(int t, char* tname)
    al = (bpp>>8)==8;
    bpp &= 0xFF;
 
+   if (!Textures[t].lpTexture)
+       Textures[t].lpTexture = malloc(Textures[t].W * Textures[t].H * 4);
+
    SetFilePointer(hfile, 18, 0, FILE_BEGIN);
 
    if (bpp == 32)
