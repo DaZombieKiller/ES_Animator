@@ -1192,16 +1192,13 @@ void SaveCMF()
         }
     }
 
-    chunk = CHUNK_UNKNOWN_1;
+    chunk = CHUNK_FACE_FLAGS;
     WriteFile( hfile, &chunk, 4, &l, NULL );
     size = 2 * FCountL[CurLod];
     WriteFile( hfile, &size, 4, &l, NULL );
 
     for (int i = 0; i < FCountL[CurLod]; i++)
-    {
-        short s = 0;
-        WriteFile( hfile, &s, 2, &l, NULL );
-    }
+        WriteFile( hfile, &gFace2[i].Flags, 2, &l, NULL);
 
     chunk = CHUNK_VERTEX_POSITIONS;
     WriteFile( hfile, &chunk, 4, &l, NULL );
@@ -1243,7 +1240,7 @@ void SaveCMF()
     for (int i = 0; i < OCountL[CurLod]; i++)
         WriteFile( hfile, &gObj[i].owner, 2, &l, NULL );
 
-    chunk = CHUNK_UNKNOWN_2;
+    chunk = CHUNK_UNKNOWN;
     WriteFile(hfile, &chunk, 4, &l, NULL);
     size = 0;
     WriteFile(hfile, &size, 4, &l, NULL);
