@@ -22,6 +22,7 @@ set(HEADER_FILES
     Animator.h
     resource.h
     ik.h
+    iqm.h
     mathem.h
 )
 

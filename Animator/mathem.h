@@ -8,6 +8,7 @@ void MulVectorsScal(Vector3d& v1,Vector3d& v2, float& r);
 void MulVectorsVect(Vector3d& v1, Vector3d& v2, Vector3d& r );
 void RotatePoint(Vector3d &p);
 Vector3d RotateVector(Vector3d v);
+Vector3d RotateVectorQuat(Vector3d v, float q[4]);
 void TransposeMatrix();
 Vector3d GetVectorInLocal(Vector3d Xax,Vector3d Yax,Vector3d Zax, Vector3d v);
 Vector3d GetVectorInGlobal(Vector3d Xax,Vector3d Yax,Vector3d Zax, Vector3d v);

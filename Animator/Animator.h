@@ -542,6 +542,7 @@ void SaveVTable();
 
 void SaveIKAs();
 void OpenIK();
+void LoadIqm(char* FName, HANDLE hfile);
 void LoadCmf(char* FName, HANDLE hfile);
 void Load3dfNew(char* FName, HANDLE hfile);
 void Save3DF();

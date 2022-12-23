@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "animator.h"   // includes application-specific information
+#include "iqm.h"
 
 
 BOOL LoadComplete;
@@ -325,6 +326,25 @@ void Load3df(char* FName)
         LoadCmf(FName, hfile);
         goto OK;
     }
+    else {
+        char magic[sizeof(IQM_MAGIC)];
+        SetFilePointer(hfile, 0, NULL, FILE_BEGIN);
+        ReadFile(hfile, magic, 16, &l, NULL);
+
+        if (!memcmp(magic, IQM_MAGIC, sizeof(IQM_MAGIC))) {
+            ReadFile(hfile, &id, 4, &l, NULL);
+
+            if (id != IQM_VERSION) {
+                CloseHandle(hfile);
+                wsprintf(logt, "Incorrect file version:\n%s", FName);
+                MessageBox(g_MWin, logt, "Error", MB_OK | MB_ICONWARNING | MB_SYSTEMMODAL);
+                return;
+            }
+
+            LoadIqm(FName, hfile);
+            goto OK;
+        }
+    }
 
 OK:
    CloseHandle(hfile);
@@ -487,7 +507,7 @@ BOOL OpenModel( HWND hWnd)
 	OpenFileName.lStructSize       = sizeof(OPENFILENAME);
     OpenFileName.hwndOwner         = hWnd;
     OpenFileName.hInstance         = g_hInst;
-    OpenFileName.lpstrFilter       = "Original model files [*.3df]\0*.3df\0Vivisector model files [*.cmf]\0*.cmf\0\0";
+    OpenFileName.lpstrFilter       = "Original model files [*.3df]\0*.3df\0Vivisector model files [*.cmf]\0*.cmf\0Inter-Quake model files [*.iqm]\0*.iqm\0\0";
     OpenFileName.lpstrCustomFilter = 0;
 	OpenFileName.nMaxCustFilter    = 0;
     OpenFileName.nFilterIndex      = LastFilterIndex;
@@ -1121,6 +1141,149 @@ void LoadCmf(char* FName, HANDLE hfile)
     // todo
     TCount = 1;
     FbyTCountL[0][0] = FCountL[0];
+
+    SetLod(0);
+}
+
+void LoadIqm(char* FName, HANDLE hfile)
+{
+    DWORD l;
+    iqmheader header;
+    SetFilePointer(hfile, 0, NULL, FILE_BEGIN);
+    ReadFile(hfile, &header, sizeof(header), &l, NULL);
+
+    LodCount = 1;
+    TCount = header.num_meshes;
+
+    FCountL[0] = 0;
+    VCountL[0] = header.num_vertexes;
+    OCountL[0] = header.num_joints;
+
+    iqmvertexarray vertexarray;
+    float* texcoords = new float[2 * header.num_vertexes];
+    for (int va = 0; va < header.num_vertexarrays; va++)
+    {
+        SetFilePointer(hfile, header.ofs_vertexarrays + sizeof(iqmvertexarray) * va, NULL, FILE_BEGIN);
+        ReadFile(hfile, &vertexarray, sizeof(iqmvertexarray), &l, NULL);
+        SetFilePointer(hfile, vertexarray.offset, NULL, FILE_BEGIN);
+
+        switch (vertexarray.type)
+        {
+        case IQM_POSITION:
+            for (int i = 0; i < header.num_vertexes; i++)
+                ReadFile(hfile, &gVertexL[0][i].pos, sizeof(Vector3d), &l, NULL);
+
+            break;
+        case IQM_TEXCOORD:
+            ReadFile(hfile, texcoords, 8 * header.num_vertexes, &l, NULL);
+            break;
+        case IQM_BLENDINDEXES:
+            if (vertexarray.format == IQM_INT)
+            {
+                for (int i = 0; i < header.num_vertexes; i++)
+                {
+                    int owners[4];
+                    ReadFile(hfile, owners, 4 * 4, &l, NULL);
+                    gVertexL[0][i].owner = owners[0];
+                }
+            }
+            else if (vertexarray.format == IQM_UBYTE)
+            {
+                for (int i = 0; i < header.num_vertexes; i++)
+                {
+                    char owners[4];
+                    ReadFile(hfile, owners, 4, &l, NULL);
+                    gVertexL[0][i].owner = owners[0];
+                }
+            }
+
+            break;
+        }
+    }
+
+    iqmjoint* joints = new iqmjoint[header.num_joints];
+    SetFilePointer(hfile, header.ofs_joints, NULL, FILE_BEGIN);
+    ReadFile(hfile, joints, sizeof(iqmjoint) * header.num_joints, &l, NULL);
+
+    for (int i = 0; i < header.num_joints; i++)
+    {
+        gObjL[0][i].owner = joints[i].parent;
+        memcpy(&gObjL[0][i].pos, joints[i].translate, sizeof(Vector3d));
+
+        int parent = joints[i].parent;
+        while (parent >= 0)
+        {
+            gObjL[0][i].pos = RotateVectorQuat(gObjL[0][i].pos, joints[parent].rotate);
+            gObjL[0][i].ox += joints[parent].translate[0];
+            gObjL[0][i].oy += joints[parent].translate[1];
+            gObjL[0][i].oz += joints[parent].translate[2];
+            parent = joints[parent].parent;
+        }
+
+        SetFilePointer(hfile, header.ofs_text + joints[i].name, NULL, FILE_BEGIN);
+        ReadFile(hfile, gObjL[0][i].OName, 32, &l, NULL);
+        gObjL[0][i].OName[31] = 0;
+    }
+    delete[] joints;
+
+    iqmtriangle* triangles = new iqmtriangle[header.num_triangles];
+    SetFilePointer(hfile, header.ofs_triangles, NULL, FILE_BEGIN);
+    ReadFile(hfile, triangles, sizeof(iqmtriangle) * header.num_triangles, &l, NULL);
+
+    iqmmesh* meshes = new iqmmesh[header.num_meshes];
+    SetFilePointer(hfile, header.ofs_meshes, NULL, FILE_BEGIN);
+    ReadFile(hfile, meshes, sizeof(iqmmesh) * header.num_meshes, &l, NULL);
+
+    for (int i = 0, f = 0; i < header.num_meshes; i++)
+    {
+        SetFilePointer(hfile, header.ofs_text + meshes[i].material, NULL, FILE_BEGIN);
+        ReadFile(hfile, Textures[i].tname, 16, &l, NULL);
+        Textures[i].tname[15] = 0;
+
+        char tname[128];
+        if (strlen(ModelPath) > 4)
+            wsprintf(tname, "%s\\%s", ModelPath, Textures[i].tname);
+        else
+            wsprintf(tname, "%s%s", ModelPath, Textures[i].tname);
+
+        if (strstr(Textures[i].tname, ".bmp"))
+            LoadTextureBMP(i, tname);
+        else if (strstr(Textures[i].tname, ".tga"))
+            LoadTextureTGA(i, tname);
+        else
+        {
+            char tname2[128];
+            strcpy(tname2, tname);
+            strcat(tname2, ".bmp");
+            LoadTextureBMP(i, tname2);
+        }
+
+        FCountL[0] += meshes[i].num_triangles;
+        FbyTCountL[0][i] = meshes[i].num_triangles;
+
+        for (int j = meshes[i].first_triangle; j < meshes[i].first_triangle + meshes[i].num_triangles; j++, f++)
+        {
+            gFaceL[0][f].v1 = triangles[j].vertex[0];
+            gFaceL[0][f].v2 = triangles[j].vertex[1];
+            gFaceL[0][f].v3 = triangles[j].vertex[2];
+            gFaceL[0][f].tax = texcoords[2 * triangles[j].vertex[0]];
+            gFaceL[0][f].tbx = texcoords[2 * triangles[j].vertex[1]];
+            gFaceL[0][f].tcx = texcoords[2 * triangles[j].vertex[2]];
+            gFaceL[0][f].tay = texcoords[2 * triangles[j].vertex[0] + 1];
+            gFaceL[0][f].tby = texcoords[2 * triangles[j].vertex[1] + 1];
+            gFaceL[0][f].tcy = texcoords[2 * triangles[j].vertex[2] + 1];
+        }
+    }
+
+    delete[] texcoords;
+    delete[] triangles;
+    delete[] meshes;
+
+    for (int f = 0; f < FCountL[0]; f++)
+    {
+        memcpy(&gFace2[f].tax, &gFaceL[0][f].tax, 4 * 6);
+        memcpy(&gFace2[f].v1, &gFaceL[0][f].v1, 4 * 3);
+    }
 
     SetLod(0);
 }

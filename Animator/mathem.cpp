@@ -90,6 +90,28 @@ Vector3d RotateVector(Vector3d v)
   return vres;
 }
 
+Vector3d RotateVectorQuat(Vector3d v, float q[4])
+{
+    float x = q[0] * 2.f;
+    float y = q[1] * 2.f;
+    float z = q[2] * 2.f;
+    float xx = q[0] * x;
+    float yy = q[1] * y;
+    float zz = q[2] * z;
+    float xy = q[0] * y;
+    float xz = q[0] * z;
+    float yz = q[1] * z;
+    float wx = q[3] * x;
+    float wy = q[3] * y;
+    float wz = q[3] * z;
+
+    Vector3d vres;
+    vres.x = (1.f - (yy + zz)) * v.x + (xy - wz) * v.y + (xz + wy) * v.z;
+    vres.y = (xy + wz) * v.x + (1.f - (xx + zz)) * v.y + (yz - wx) * v.z;
+    vres.z = (xz - wy) * v.x + (yz + wx) * v.y + (1.f - (xx + yy)) * v.z;
+    return vres;
+}
+
 void TransposeMatrix()
 {
 	TMatrix tempM;
