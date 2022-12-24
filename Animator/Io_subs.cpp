@@ -179,7 +179,6 @@ int LoadTextureBMP(int t, char* tname, int show_err)
 	  }
 	  return 0;
    }
-   byte fRGB[2048][3];
    BITMAPFILEHEADER bmpFH;
    BITMAPINFOHEADER bmpIH;
    DWORD l;
@@ -198,12 +197,15 @@ int LoadTextureBMP(int t, char* tname, int show_err)
    if (!Textures[t].lpTexture)
 	   Textures[t].lpTexture = malloc(Textures[t].W*Textures[t].H*4);
 
+   byte* fRGB = new byte[w * h * 3];
+
    for (int y=0; y<h; y++) {      
       ReadFile( hfile, fRGB, 3*w, &l, NULL );
       for (int x=0; x<w; x++)
         *((DWORD*)Textures[t].lpTexture + (h-y-1)*w+x) = 
-            ((int)fRGB[x][2]<<16) + ((int)fRGB[x][1]<< 8) + ((int)fRGB[x][0]) + 0xFF000000;
+            ((int)fRGB[3 * x + 2]<<16) + ((int)fRGB[3 * x + 1]<< 8) + ((int)fRGB[3 * x + 0]) + 0xFF000000;
    }
+   delete[] fRGB;
    CloseHandle(hfile);
    return 1;
 }
@@ -1135,7 +1137,9 @@ void LoadCmf(char* FName, HANDLE hfile)
     for (int f = 0; f < FCountL[0]; f++)
     {
         memcpy(&gFace2[f].tax, &gFaceL[0][f].tax, 4 * 6);
-        memcpy(&gFace2[f].v1, &gFaceL[0][f].v1, 4 * 3);
+        gFace2[f].v1 = gFaceL[0][f].v1;
+        gFace2[f].v2 = gFaceL[0][f].v2;
+        gFace2[f].v3 = gFaceL[0][f].v3;
     }
 
     // todo
@@ -1161,6 +1165,10 @@ void LoadIqm(char* FName, HANDLE hfile)
 
     iqmvertexarray vertexarray;
     float* texcoords = new float[2 * header.num_vertexes];
+    float* weights = new float[4 * header.num_vertexes];
+    int* indices = new int[4 * header.num_vertexes];
+    Vector3d* vertices = new Vector3d[header.num_vertexes];
+
     for (int va = 0; va < header.num_vertexarrays; va++)
     {
         SetFilePointer(hfile, header.ofs_vertexarrays + sizeof(iqmvertexarray) * va, NULL, FILE_BEGIN);
@@ -1170,36 +1178,99 @@ void LoadIqm(char* FName, HANDLE hfile)
         switch (vertexarray.type)
         {
         case IQM_POSITION:
-            for (int i = 0; i < header.num_vertexes; i++)
-                ReadFile(hfile, &gVertexL[0][i].pos, sizeof(Vector3d), &l, NULL);
-
+            ReadFile(hfile, vertices, sizeof(Vector3d) * header.num_vertexes, &l, NULL);
             break;
         case IQM_TEXCOORD:
             ReadFile(hfile, texcoords, 8 * header.num_vertexes, &l, NULL);
             break;
-        case IQM_BLENDINDEXES:
-            if (vertexarray.format == IQM_INT)
+        case IQM_BLENDWEIGHTS:
+            if (vertexarray.format == IQM_FLOAT)
             {
-                for (int i = 0; i < header.num_vertexes; i++)
-                {
-                    int owners[4];
-                    ReadFile(hfile, owners, 4 * 4, &l, NULL);
-                    gVertexL[0][i].owner = owners[0];
-                }
+                ReadFile(hfile, weights, 4 * 4 * header.num_vertexes, &l, NULL);
             }
             else if (vertexarray.format == IQM_UBYTE)
             {
                 for (int i = 0; i < header.num_vertexes; i++)
                 {
-                    char owners[4];
+                    unsigned char owners[4];
                     ReadFile(hfile, owners, 4, &l, NULL);
-                    gVertexL[0][i].owner = owners[0];
+                    weights[4 * i + 0] = (float)owners[0] / 255.f;
+                    weights[4 * i + 1] = (float)owners[1] / 255.f;
+                    weights[4 * i + 2] = (float)owners[2] / 255.f;
+                    weights[4 * i + 3] = (float)owners[3] / 255.f;
+                }
+            }
+            break;
+        case IQM_BLENDINDEXES:
+            if (vertexarray.format == IQM_INT)
+            {
+                ReadFile(hfile, indices, 4 * 4 * header.num_vertexes, &l, NULL);
+            }
+            else if (vertexarray.format == IQM_UBYTE)
+            {
+                for (int i = 0; i < header.num_vertexes; i++)
+                {
+                    unsigned char owners[4];
+                    ReadFile(hfile, owners, 4, &l, NULL);
+                    indices[4 * i + 0] = owners[0];
+                    indices[4 * i + 1] = owners[1];
+                    indices[4 * i + 2] = owners[2];
+                    indices[4 * i + 3] = owners[3];
                 }
             }
 
             break;
         }
     }
+
+    int* owners = new int[header.num_vertexes];
+
+    for (int i = 0; i < header.num_vertexes; i++)
+    {
+        float weight = weights[4 * i + 0];
+        int owner = indices[4 * i + 0];
+
+        for (int w = 1; w < 4; w++)
+        {
+            if (weight < weights[4 * i + w])
+            {
+                weight = weights[4 * i + w];
+                owner = indices[4 * i + w];
+            }
+        }
+
+        if (weight <= 0)
+            owner = -1;
+
+        owners[i] = owner;
+    }
+
+    int* vertexmap = new int[header.num_vertexes];
+    ZeroMemory(vertexmap, 4 * header.num_vertexes);
+
+    for (int i = 0, o = -1; o < (int)header.num_joints; o++)
+    {
+        for (int v = 0; v < header.num_vertexes; v++)
+        {
+            if (owners[v] == o)
+            {
+                vertexmap[v] = i;
+                i++;
+            }
+        }
+    }
+
+    for (int i = 0; i < header.num_vertexes; i++)
+    {
+        gVertexL[0][vertexmap[i]].pos = vertices[i];
+        gVertexL[0][vertexmap[i]].owner = owners[i];
+        gVertexL[0][vertexmap[i]].hide = 0;
+    }
+
+    delete[] owners;
+    delete[] vertices;
+    delete[] indices;
+    delete[] weights;
 
     iqmjoint* joints = new iqmjoint[header.num_joints];
     SetFilePointer(hfile, header.ofs_joints, NULL, FILE_BEGIN);
@@ -1263,26 +1334,34 @@ void LoadIqm(char* FName, HANDLE hfile)
 
         for (int j = meshes[i].first_triangle; j < meshes[i].first_triangle + meshes[i].num_triangles; j++, f++)
         {
-            gFaceL[0][f].v1 = triangles[j].vertex[0];
-            gFaceL[0][f].v2 = triangles[j].vertex[1];
-            gFaceL[0][f].v3 = triangles[j].vertex[2];
-            gFaceL[0][f].tax = texcoords[2 * triangles[j].vertex[0]];
-            gFaceL[0][f].tbx = texcoords[2 * triangles[j].vertex[1]];
-            gFaceL[0][f].tcx = texcoords[2 * triangles[j].vertex[2]];
-            gFaceL[0][f].tay = texcoords[2 * triangles[j].vertex[0] + 1];
-            gFaceL[0][f].tby = texcoords[2 * triangles[j].vertex[1] + 1];
-            gFaceL[0][f].tcy = texcoords[2 * triangles[j].vertex[2] + 1];
+            int v1 = triangles[j].vertex[0];
+            int v2 = triangles[j].vertex[1];
+            int v3 = triangles[j].vertex[2];
+            gFace2[f].v1 = vertexmap[v1];
+            gFace2[f].v2 = vertexmap[v2];
+            gFace2[f].v3 = vertexmap[v3];
+            gFace2[f].tax = texcoords[2 * v1];
+            gFace2[f].tbx = texcoords[2 * v2];
+            gFace2[f].tcx = texcoords[2 * v3];
+            gFace2[f].tay = texcoords[2 * v1 + 1];
+            gFace2[f].tby = texcoords[2 * v2 + 1];
+            gFace2[f].tcy = texcoords[2 * v3 + 1];
+            gFace2[f].Flags = 0;
         }
     }
 
+    delete[] vertexmap;
     delete[] texcoords;
     delete[] triangles;
     delete[] meshes;
 
     for (int f = 0; f < FCountL[0]; f++)
     {
-        memcpy(&gFace2[f].tax, &gFaceL[0][f].tax, 4 * 6);
-        memcpy(&gFace2[f].v1, &gFaceL[0][f].v1, 4 * 3);
+        memcpy(&gFaceL[0][f].tax, &gFace2[f].tax, 4 * 6);
+        gFaceL[0][f].v1 = gFace2[f].v1;
+        gFaceL[0][f].v2 = gFace2[f].v2;
+        gFaceL[0][f].v3 = gFace2[f].v3;
+        gFaceL[0][f].Flags = gFace2[f].Flags;
     }
 
     SetLod(0);
